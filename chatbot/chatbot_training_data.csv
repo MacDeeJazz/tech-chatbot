@@ -1,0 +1,29 @@
+text,intent
+getting blue screen of death,blue_screen
+bsod crash stop code error,blue_screen
+computer keeps restarting with stop code loop,blue_screen
+critical process died blue screen error,blue_screen
+wifi is not connecting,no_wifi
+lost internet connection wireless adapter,no_wifi
+network adapter disabled disconnecting constantly,no_wifi
+cant connect to wireless network,no_wifi
+laptop is overheating and shutting down,overheating
+fans are running loud and cpu is very hot,overheating
+high temperature thermal paste issue,overheating
+computer gets extremely hot and turns off,overheating
+pc won't turn on completely dead,no_power
+no power lights on startup,no_power
+computer won't boot up at all,no_power
+motherboard has no power indicators,no_power
+ram sticks causing beep codes,ram_failure
+computer won't post memory error dimm,ram_failure
+bad memory sector bluescreen,ram_failure
+motherboard is giving ram beep errors,ram_failure
+hard drive clicking noise smart error,hard_drive
+ssd unbootable corrupted file system,hard_drive
+disk not detected in bios,hard_drive
+storage drive is making clicking sounds and failing,hard_drive
+no bootable device found error,hard_drive
+operating system not found,hard_drive
+burnt smell coming from psu,power_supply
+bluescreen after installing new ram,ram_failure

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Technician Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .chat-container { width: 100%; max-width: 600px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .chat-box { height: 400px; border: 1px solid #ddd; border-radius: 4px; padding: 15px; overflow-y: scroll; margin-bottom: 15px; background: #fafafa; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 14px; border-radius: 6px; max-width: 80%; line-height: 1.4; white-space: pre-line; }
+        .user-message { background: #007bff; color: white; align-self: flex-end; }
+        .bot-message { background: #e9ecef; color: #333; align-self: flex-start; }
+        .input-group { display: flex; gap: 10px; }
+        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <h2>IT Support Technician Assistant</h2>
+    <div class="chat-box" id="chatBox">
+        <div class="message bot-message">Hello! I'm your IT diagnostic assistant. What hardware or software issue are you experiencing today?</div>
+    </div>
+    <div class="input-group">
+        <input type="text" id="userInput" placeholder="Describe your computer issue..." autofocus>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Append User Message
+        chatBox.innerHTML += `<div class="message user-message">${escapeHtml(message)}</div>`;
+        userInput.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Send POST request to Django backend
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: `message=${encodeURIComponent(message)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatBox.innerHTML += `<div class="message bot-message">${escapeHtml(data.response)}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            chatBox.innerHTML += `<div class="message bot-message" style="color:red;">Error communicating with server.</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+</script>
+
+</body>
+</html>
